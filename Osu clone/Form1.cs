@@ -30,6 +30,8 @@ namespace Osu_clone
             _timer = 40;
             _difficult = 35;           
             scoreLabel.Text = "score: " + 0;
+            timerLabel.Text = "time: " + _timer;
+
         }
 
         public Form1()
