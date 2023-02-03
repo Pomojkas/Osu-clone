@@ -19,8 +19,7 @@ namespace Osu_clone
         private int _score = 0;
         private int _scoreLimit = 400;
         private int _timer = 40;
-        private int _difficult = 35;
-        private bool _notEndScreen = true;
+        private int _difficult = 35;        
 
         private void SetDefault()
         {
@@ -29,8 +28,8 @@ namespace Osu_clone
             _score = 0;
             _scoreLimit = 400;
             _timer = 40;
-            _difficult = 35;
-            _notEndScreen = true;
+            _difficult = 35;           
+            scoreLabel.Text = "score: " + 0;
         }
 
         public Form1()
@@ -113,27 +112,27 @@ namespace Osu_clone
 
         private void AddScore(int score)
         {
-            _score += score;
-            scoreLabel.Text = "score: " + _score.ToString();
+            if (_timer > 0 && _score < _scoreLimit)
+            {
+                _score += score;
+                scoreLabel.Text = "score: " + _score.ToString();
+            }
         }
 
         private void retryLabel_MouseClick(object sender, MouseEventArgs e)
         {
             retryLabel.Visible = false;
             endLabel.Visible = false;
-            SetDefault();
-
-            _notEndScreen = true;
+            SetDefault();            
         }
 
         private void EndGame()
         {
-            if (_timer >= 0 && _score >= _scoreLimit && _notEndScreen)
+            if (_timer >= 0 && _score >= _scoreLimit)
                 endLabel.Text = "You win!";
             else
                 endLabel.Text = "You lose(";
 
-            _notEndScreen= false;
             endLabel.Visible = true;
             retryLabel.Visible = true;
         }
