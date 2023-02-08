@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Osu_clone
 {
     public partial class Form1 : Form
     {
+        private SqlConnection sqlConnection = null;
         public Bitmap HandlerTexture = Resource1.Handler,
                       TargetTexture = Resource1.Target;
         private Point _targetPosition = new Point(400, 300);
@@ -19,7 +22,7 @@ namespace Osu_clone
         private int _score = 0;
         private int _scoreLimit = 400;
         private int _timer = 40;
-        private int _difficult = 35;        
+        private int _difficult = 35;
 
         private void SetDefault()
         {
@@ -28,7 +31,7 @@ namespace Osu_clone
             _score = 0;
             _scoreLimit = 400;
             _timer = 40;
-            _difficult = 35;           
+            _difficult = 35;
             scoreLabel.Text = "score: " + 0;
             timerLabel.Text = "time: " + _timer;
         }
@@ -124,7 +127,17 @@ namespace Osu_clone
         {
             retryLabel.Visible = false;
             endLabel.Visible = false;
-            SetDefault();            
+            SetDefault();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["OsuDB"].ConnectionString);
+
+            sqlConnection.Open();
+
+            if (sqlConnection.State == ConnectionState.Open)
+                MessageBox.Show("Подключение к базе данных устанвлено!");
         }
 
         private void EndGame()
