@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace Osu_clone
 {
@@ -21,7 +22,7 @@ namespace Osu_clone
         private Point _direction = Point.Empty;
         private int _score = 0;
         private int _scoreLimit = 400;
-        private int _timer = 40;
+        private int _timer = 5;
         private int _difficult = 35;
 
         private void SetDefault()
@@ -77,7 +78,7 @@ namespace Osu_clone
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            Graphics g = e.Graphics;            
 
             int objectSize = 100;
             int halfObjectSize = objectSize / 2;
@@ -89,11 +90,13 @@ namespace Osu_clone
 
             if (_targetPosition.X < halfObjectSize || _targetPosition.X > this.Width - halfObjectSize)
             {
+                RandomTargetPosition();
                 _direction.X *= -1;
             }
 
             if (_targetPosition.Y < halfObjectSize || _targetPosition.Y > this.Height - halfObjectSize)
             {
+                RandomTargetPosition();
                 _direction.Y *= -1;
             }
 
@@ -114,6 +117,14 @@ namespace Osu_clone
             g.DrawImage(TargetTexture, targetRect);
         }
 
+        private void RandomTargetPosition()
+        {
+            Random rand = new Random();
+
+            _targetPosition.X = rand.Next(this.Width / 3, this.Width / 3 * 2);
+            _targetPosition.Y = rand.Next(this.Height / 3, this.Height / 3 * 2);
+        }
+
         private void AddScore(int score)
         {
             if (_timer > 0 && _score < _scoreLimit)
@@ -128,6 +139,7 @@ namespace Osu_clone
             retryLabel.Visible = false;
             endLabel.Visible = false;
             SetDefault();
+            timer3.Enabled = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -136,19 +148,37 @@ namespace Osu_clone
 
             sqlConnection.Open();
 
-            if (sqlConnection.State == ConnectionState.Open)
-                MessageBox.Show("Подключение к базе данных устанвлено!");
+            //if (sqlConnection.State == ConnectionState.Open)
+            //    MessageBox.Show("Подключение к базе данных устанвлено!");
         }
 
         private void EndGame()
         {
+            timer3.Enabled = false;
+
             if (_timer >= 0 && _score >= _scoreLimit)
                 endLabel.Text = "You win!";
             else
                 endLabel.Text = "You lose(";
 
+            WritingToTheDataBase();
+
             endLabel.Visible = true;
             retryLabel.Visible = true;
+        }
+
+        private void WritingToTheDataBase()
+        {
+            SqlCommand command = new SqlCommand(
+                $"INSERT INTO [Records] (Name, Date, Record_time, Record_score) VALUES (@Name, @Date, @Record_time, @Record_score)",
+                sqlConnection);
+
+            command.Parameters.AddWithValue("Name", "placeHolder");
+            command.Parameters.AddWithValue("Date", $"{DateTime.Today.Month}/{DateTime.Today.Day}/{DateTime.Today.Year}");
+            command.Parameters.AddWithValue("Record_time", _timer);
+            command.Parameters.AddWithValue("Record_score", _score);
+
+            //MessageBox.Show(command.ExecuteNonQuery().ToString());
         }
     }
 }
