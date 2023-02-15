@@ -85,8 +85,8 @@ namespace Osu_clone
 
             var localPosition = this.PointToClient(Cursor.Position);
 
-            _targetPosition.X += _direction.X * 8;
-            _targetPosition.Y += _direction.Y * 8;
+            _targetPosition.X += _direction.X * 7;
+            _targetPosition.Y += _direction.Y * 7;
 
             if (_targetPosition.X < halfObjectSize || _targetPosition.X > this.Width - halfObjectSize)
             {
@@ -172,13 +172,14 @@ namespace Osu_clone
             SqlCommand command = new SqlCommand(
                 $"INSERT INTO [Records] (Name, Date, Record_time, Record_score) VALUES (@Name, @Date, @Record_time, @Record_score)",
                 sqlConnection);
-
+            
             command.Parameters.AddWithValue("Name", "placeHolder");
             command.Parameters.AddWithValue("Date", $"{DateTime.Today.Month}/{DateTime.Today.Day}/{DateTime.Today.Year}");
             command.Parameters.AddWithValue("Record_time", _timer);
             command.Parameters.AddWithValue("Record_score", _score);
 
             //MessageBox.Show(command.ExecuteNonQuery().ToString());
+            command.ExecuteNonQuery().ToString();            
         }
     }
 }
