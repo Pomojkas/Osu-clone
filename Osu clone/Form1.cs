@@ -179,7 +179,7 @@ namespace Osu_clone
             command.Parameters.AddWithValue("Record_score", _score);
 
             //MessageBox.Show(command.ExecuteNonQuery().ToString());
-            command.ExecuteNonQuery().ToString();            
+            command.ExecuteNonQuery();
         }
     }
 }
