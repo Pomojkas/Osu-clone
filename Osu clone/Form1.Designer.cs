@@ -36,6 +36,11 @@
             this.timerLabel = new System.Windows.Forms.Label();
             this.endLabel = new System.Windows.Forms.Label();
             this.retryLabel = new System.Windows.Forms.Label();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // timer1
@@ -99,6 +104,39 @@
             this.retryLabel.Visible = false;
             this.retryLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.retryLabel_MouseClick);
             // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(12, 134);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(267, 129);
+            this.listView1.TabIndex = 4;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.Visible = false;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Score";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Time";
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Date";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -106,6 +144,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackgroundImage = global::Osu_clone.Resource1.Background;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.retryLabel);
             this.Controls.Add(this.endLabel);
             this.Controls.Add(this.timerLabel);
@@ -131,6 +170,11 @@
         private System.Windows.Forms.Label timerLabel;
         private System.Windows.Forms.Label endLabel;
         private System.Windows.Forms.Label retryLabel;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
     }
 }
 
