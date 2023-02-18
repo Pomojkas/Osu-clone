@@ -143,16 +143,6 @@ namespace Osu_clone
             timer3.Enabled = true;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["OsuDB"].ConnectionString);
-
-            sqlConnection.Open();
-
-            //if (sqlConnection.State == ConnectionState.Open)
-            //    MessageBox.Show("Подключение к базе данных устанвлено!");
-        }
-
         private void EndGame()
         {
             timer3.Enabled = false;
@@ -162,73 +152,9 @@ namespace Osu_clone
             else
                 endLabel.Text = "You lose(";
 
-            WritingToTheDataBase();
-            //ShowRecords();
-
             listView1.Visible = true;
             endLabel.Visible = true;
             retryLabel.Visible = true;
-        }
-
-        private void WritingToTheDataBase()
-        {
-            SqlCommand command = new SqlCommand(
-                $"INSERT INTO [Records] (Name, Date, Record_time, Record_score) VALUES (@Name, @Date, @Record_time, @Record_score)",
-                sqlConnection);
-
-            command.Parameters.AddWithValue("Name", "placeHolder");
-            command.Parameters.AddWithValue("Date", $"{DateTime.Today.Month}/{DateTime.Today.Day}/{DateTime.Today.Year}");
-            command.Parameters.AddWithValue("Record_time", _timer);
-            command.Parameters.AddWithValue("Record_score", _score);
-
-            //MessageBox.Show(command.ExecuteNonQuery().ToString());
-            command.ExecuteNonQuery();
-        }
-
-        private void ShowRecords()
-        {
-            listView1.Clear();
-
-            SqlDataReader dataReader = null;
-
-            try
-            {
-                SqlCommand sqlCommand = new SqlCommand("SELECT Name, Record_score, Record_time, Date FROM Records",
-                    sqlConnection);
-
-                dataReader = sqlCommand.ExecuteReader();
-
-                ListViewItem Item = null;
-
-                while (dataReader.Read())
-                {
-                    Item = new ListViewItem(new string[] { Convert.ToString(dataReader["Name"]),
-                                                            Convert.ToString(dataReader["Record_score"]),
-                                                            Convert.ToString(dataReader["Record_time"]),
-                                                            Convert.ToString(dataReader["Date"])});
-                    listView1.Items.Add(Item);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                if (dataReader != null && !dataReader.IsClosed)
-                {
-                    dataReader.Close();
-                }
-            }
-        } // и это хз ебать
-
-        private void UpdateDataBase() // это всё хз ебать
-        {
-            SqlCommand command = new SqlCommand(
-                $"UPDATE [Records] SET Name = 'pHolder'," +
-                                     $"Date =  ," +
-                                     $"Record_time = ," +
-                                     $"Record_score = WHERE Record_time = ");
         }
     }
 }
