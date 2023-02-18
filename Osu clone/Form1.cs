@@ -15,7 +15,6 @@ namespace Osu_clone
 {
     public partial class Form1 : Form
     {
-        private SqlConnection sqlConnection = null;
         public Bitmap HandlerTexture = Resource1.Handler,
                       TargetTexture = Resource1.Target;
         private Point _targetPosition = new Point(400, 300);
