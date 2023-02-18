@@ -10,6 +10,9 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Runtime.Serialization;
 
 namespace Osu_clone
 {
@@ -137,7 +140,6 @@ namespace Osu_clone
         {
             retryLabel.Visible = false;
             endLabel.Visible = false;
-            listView1.Visible = false;
             SetDefault();
             timer3.Enabled = true;
         }
@@ -151,9 +153,52 @@ namespace Osu_clone
             else
                 endLabel.Text = "You lose(";
 
-            listView1.Visible = true;
+            SaveRecord();
+
             endLabel.Visible = true;
             retryLabel.Visible = true;
+        }
+
+        private void ReadAndSortRecord()
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            List<Record> records = new List<Record>();
+            using (FileStream fs = new FileStream("records.dat", FileMode.OpenOrCreate))
+            {
+                Record[] deserilizeRecord = (Record[])formatter.Deserialize(fs);
+
+                foreach (Record r in deserilizeRecord)
+                {
+                    records.Add(r);
+                }
+            }
+            records.Sort();
+        }
+
+        private void SaveRecord()
+        {
+            Record currentPlayer = new Record("placeHolder", _score, _timer);
+            Record[] record = new Record[] { (currentPlayer) };
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (FileStream fs = new FileStream("records.dat", FileMode.OpenOrCreate))
+            {
+                formatter.Serialize(fs, record);
+            }
+        }
+
+        [Serializable]
+        class Record
+        {
+            public string Name { get; set; }
+            public int Score { get; set; }
+            public int Time { get; set; }
+
+            public Record(string name, int score, int time)
+            {
+                Name = name;
+                Score = score;
+                Time = time;
+            }
         }
     }
 }
