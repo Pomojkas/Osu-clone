@@ -23,8 +23,8 @@ namespace Osu_clone
         private Point _targetPosition = new Point(400, 300);
         private Point _direction = Point.Empty;
         private int _score = 0;
-        private int _scoreLimit = 400;
-        private int _timer = 5;
+        private int _scoreLimit = 300;
+        private int _timer = 40;
         private int _difficult = 35;
 
         private void SetDefault()
@@ -32,7 +32,7 @@ namespace Osu_clone
             _targetPosition = new Point(400, 300);
             _direction = Point.Empty;
             _score = 0;
-            _scoreLimit = 400;
+            _scoreLimit = 300;
             _timer = 40;
             _difficult = 35;
             scoreLabel.Text = "score: " + 0;
@@ -87,8 +87,8 @@ namespace Osu_clone
 
             var localPosition = this.PointToClient(Cursor.Position);
 
-            _targetPosition.X += _direction.X * 7;
-            _targetPosition.Y += _direction.Y * 7;
+            _targetPosition.X += _direction.X * 6;
+            _targetPosition.Y += _direction.Y * 6;
 
             if (_targetPosition.X < halfObjectSize || _targetPosition.X > this.Width - halfObjectSize)
             {
@@ -140,6 +140,8 @@ namespace Osu_clone
         {
             retryLabel.Visible = false;
             endLabel.Visible = false;
+            oldRecordLabel.Visible = false;
+            resetRecordLabel.Visible = false;
             SetDefault();
             timer3.Enabled = true;
         }
@@ -147,42 +149,81 @@ namespace Osu_clone
         private void EndGame()
         {
             timer3.Enabled = false;
-
-            if (_timer >= 0 && _score >= _scoreLimit)
-                endLabel.Text = "You win!";
-            else
-                endLabel.Text = "You lose(";
-
-            SaveRecord();
-
             endLabel.Visible = true;
             retryLabel.Visible = true;
-        }
 
-        private void ReadAndSortRecord()
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            List<Record> records = new List<Record>();
-            using (FileStream fs = new FileStream("records.dat", FileMode.OpenOrCreate))
+            if (_timer >= 0 && _score >= _scoreLimit)
             {
-                Record[] deserilizeRecord = (Record[])formatter.Deserialize(fs);
-
-                foreach (Record r in deserilizeRecord)
+                endLabel.Text = "You win!";
+                try
                 {
-                    records.Add(r);
+                    SaveRecord();
+                }
+                catch
+                {
+                    CreateRecord();
                 }
             }
-            records.Sort();
+            else
+            { endLabel.Text = "You lose("; }
+
         }
 
         private void SaveRecord()
         {
-            Record currentPlayer = new Record("placeHolder", _score, _timer);
-            Record[] record = new Record[] { (currentPlayer) };
+            int tempTimer = 0;
             BinaryFormatter formatter = new BinaryFormatter();
             using (FileStream fs = new FileStream("records.dat", FileMode.OpenOrCreate))
             {
+                Record deserilizeRecord = (Record)formatter.Deserialize(fs);
+
+                tempTimer = deserilizeRecord.Time;
+                if (deserilizeRecord.Time > _timer)
+                {
+                    oldRecordLabel.Text = "record: " + deserilizeRecord.Time.ToString();
+                    MessageBox.Show("Рекорд не побит");
+                }
+            }
+
+            if (tempTimer < _timer)
+            {
+                Record record = new Record("GopaHolder", _score, _timer);
+                oldRecordLabel.Text = "record: " + tempTimer.ToString();
+
+                using (FileStream fs = new FileStream("records.dat", FileMode.OpenOrCreate))
+                {
+                    formatter.Serialize(fs, record);
+                    MessageBox.Show("Рекорд побит и перезаписан");
+                }
+            }
+
+            oldRecordLabel.Visible = true;
+            resetRecordLabel.Visible = true;
+        }
+
+        private void CreateRecord()
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            Record record = new Record("PlaceHolder", _score, _timer);
+            using (FileStream fs = new FileStream("records.dat", FileMode.OpenOrCreate))
+            {
                 formatter.Serialize(fs, record);
+            }
+            MessageBox.Show("Рекорд создан");
+        }
+
+        private void resetRecordLabel_DoubleClick(object sender, EventArgs e)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            Record record = new Record("SozdanHolder", 0, 0);
+
+            using (FileStream fs = new FileStream("records.dat", FileMode.OpenOrCreate))
+            {
+                formatter.Serialize(fs, record);
+                MessageBox.Show("Рекорд сброшен");
+                oldRecordLabel.Text = "record: 0";
             }
         }
 

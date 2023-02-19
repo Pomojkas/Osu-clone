@@ -36,6 +36,8 @@
             this.timerLabel = new System.Windows.Forms.Label();
             this.endLabel = new System.Windows.Forms.Label();
             this.retryLabel = new System.Windows.Forms.Label();
+            this.oldRecordLabel = new System.Windows.Forms.Label();
+            this.resetRecordLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // timer1
@@ -99,6 +101,29 @@
             this.retryLabel.Visible = false;
             this.retryLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.retryLabel_MouseClick);
             // 
+            // oldRecordLabel
+            // 
+            this.oldRecordLabel.AutoSize = true;
+            this.oldRecordLabel.Font = new System.Drawing.Font("Matura MT Script Capitals", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.oldRecordLabel.Location = new System.Drawing.Point(11, 130);
+            this.oldRecordLabel.Name = "oldRecordLabel";
+            this.oldRecordLabel.Size = new System.Drawing.Size(134, 50);
+            this.oldRecordLabel.TabIndex = 1;
+            this.oldRecordLabel.Text = "record:";
+            this.oldRecordLabel.Visible = false;
+            // 
+            // resetRecordLabel
+            // 
+            this.resetRecordLabel.AutoSize = true;
+            this.resetRecordLabel.Font = new System.Drawing.Font("Matura MT Script Capitals", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resetRecordLabel.Location = new System.Drawing.Point(544, 505);
+            this.resetRecordLabel.Name = "resetRecordLabel";
+            this.resetRecordLabel.Size = new System.Drawing.Size(228, 47);
+            this.resetRecordLabel.TabIndex = 3;
+            this.resetRecordLabel.Text = "Reset record";
+            this.resetRecordLabel.Visible = false;
+            this.resetRecordLabel.DoubleClick += new System.EventHandler(this.resetRecordLabel_DoubleClick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -106,8 +131,10 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackgroundImage = global::Osu_clone.Resource1.Background;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.resetRecordLabel);
             this.Controls.Add(this.retryLabel);
             this.Controls.Add(this.endLabel);
+            this.Controls.Add(this.oldRecordLabel);
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.scoreLabel);
             this.MaximizeBox = false;
@@ -130,6 +157,8 @@
         private System.Windows.Forms.Label timerLabel;
         private System.Windows.Forms.Label endLabel;
         private System.Windows.Forms.Label retryLabel;
+        private System.Windows.Forms.Label oldRecordLabel;
+        private System.Windows.Forms.Label resetRecordLabel;
     }
 }
 
